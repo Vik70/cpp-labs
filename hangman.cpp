@@ -14,11 +14,28 @@ int remainingGuesses = 8;
 int correctGuesses = 0;
 bool gameOver = false;
 char currentGuess = 'a';
+bool willContinue = true;
 // Generate Random index
 int randomGen(int numWords) {
     return (rand() % numWords);
 }
 
+// Check if input is y or n
+bool checkYorN(char c) {
+    if (tolower(c) == 121)
+        return true;
+    if (tolower(c) == 110)
+        return false;
+    return true;
+}
+
+// Check if input is valid
+bool isYorN(char c) {
+    if (tolower(c) == 121 || tolower(c) == 110)
+        return true;
+    else
+        return false;
+}
 // Remove letter from remaining guesses -C
 void removeLetter(char c) {
     int i = 0;
@@ -76,7 +93,7 @@ void evaluateInput(char guess) {
         // Remove from available guesses
         removeLetter(guess);
         if (isCorrect(guess)) {
-                        printf("*** Correct guess - '%c' IS in the word ***\n", guess);
+            printf("*** Correct guess - '%c' IS in the word ***\n", guess);
             return;
         } else {
             // Incorrect answer
@@ -147,9 +164,26 @@ int main(int argc, char const *argv[]) {
 
         evaluateInput(guess);
         if (checkGameOver()) {
-            printf("GAME OVER: Word was %s\n", ANSWER_WORD);
+            bool willContinue = true;
+            while (willContinue) {
+                char answer = 'a';
+                printf("GAME OVER: Word was %s\n", ANSWER_WORD);
+                printf("Would you like to CONTINUE? press y/n\n");
+                scanf("%s", &answer);
+                if (isYorN(answer))
+                    if (checkYorN) {
+                        willContinue = false;
+                        break;
+                    } else
+                        return 0;
+                else {
+                    printf("Invalid input: Please type y or n\n");
+                    continue;
+                }
+            }
+
             // deal with game over
-            return 0;
+
         } else {
             continue;
         }
